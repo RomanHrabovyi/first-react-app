@@ -14,9 +14,9 @@ class App extends Component {
         super(props);
         this.state = {
             data: [
-                {name: 'John', salary: 200, increase: false, id: 1},
-                {name: 'Alex', salary: 200, increase: true, id: 2},
-                {name: 'Kim', salary: 200, increase: false, id: 3}       
+                {name: 'John', salary: 200, increase: false, rise: true, id: 1},
+                {name: 'Alex', salary: 200, increase: true, rise: false, id: 2},
+                {name: 'Kim', salary: 200, increase: false, rise: false, id: 3}       
             ]
         }
         this.maxId = 6
@@ -36,6 +36,7 @@ class App extends Component {
             name,
             salary,
             increase: false,
+            rise: false,
             id: this.maxId++
         }
 
@@ -47,10 +48,36 @@ class App extends Component {
         })
     }
 
+    onToggleIncrease = (id) => {
+        this.setState(({data}) => ({
+            data: data.map(item => {
+                if (item.id === id) {
+                    return {...item, increase: !item.increase}
+                }
+                return item
+            })
+        }))
+    }
+
+    onToggleRise = (id) => {
+        this.setState(({data}) => ({
+            data: data.map(item => {
+                if (item.id === id) {
+                    return {...item, rise: !item.rise}
+                }
+                return item
+            })
+        }))
+    }
+
     render () {
+
+        const employees = this.state.data.length;
+        const increaseD = this.state.data.filter(item => item.increase).length;
+
         return (
             <div className="app">
-                <AppInfo/>
+                <AppInfo employees={employees} increaseD={increaseD}/>
     
                 <div className="search-panel">
                     <SearchPanel/>
@@ -58,7 +85,9 @@ class App extends Component {
                 </div>
                 <EmployersList 
                     data={this.state.data}
-                    onDelete={this.deleteItem}/>
+                    onDelete={this.deleteItem}
+                    onToggleIncrease={this.onToggleIncrease}
+                    onToggleRise={this.onToggleRise}/>
                 <EmployersAddForm onAdd={this.addItem}/>
             </div>
         );
