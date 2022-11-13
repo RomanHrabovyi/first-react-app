@@ -1,11 +1,24 @@
-
+import { Component } from 'react/cjs/react.production.min'
 import './employers-list-item.css'
 
-const EmployersListItem = (props) => {
-   
+class EmployersListItem extends Component {
+   constructor(props) {
+        super(props);
+        this.state = {
+            salary: this.props.salary
+        }
+   }
 
+   onChangeSalary = (e) => {
+        const {onChangeSalary, name} = this.props;
+        this.setState(()=>({
+            salary: e.target.value
+        }))
+        onChangeSalary(name, e.target.value)       
+   }
     
-        const {name, salary, onDelete, onToggleProp, increase, rise} = props;
+    render() {
+        const {name, onDelete, onToggleProp, increase, rise} = this.props;
 
         let classNames = "list-group-item d-flex justify-content-between";
 
@@ -22,7 +35,10 @@ const EmployersListItem = (props) => {
             <span className="list-group-item-label"
                   onClick={onToggleProp}
                   data-toggle="rise">{name}</span>
-            <input type="text" className="list-group-item-input" defaultValue={salary + '$'}/>
+            <input type="text" 
+                    className="list-group-item-input" 
+                    value={this.state.salary}
+                    onChange={this.onChangeSalary}/>
             <div className='d-flex justify-content-center align-items-center'>
                 <button type="button"
                     className="btn-cookie btn-sm "
@@ -41,6 +57,7 @@ const EmployersListItem = (props) => {
             </div>
         </li>
     );
+    }
     
 }
 
